@@ -1,0 +1,38 @@
+version: '2'
+services:
+    cwpgsql:
+        image: postgres:11
+        container_name: cwpgsql
+        environment:
+          - POSTGRES_PASSWORD=postgres
+          - POSTGRES_USER=postgres
+          - POSTGRES_DB=commetoi
+        ports:
+          - 5433:5432
+
+    cwphp:
+        build:
+            context: .
+            dockerfile: .docker/php/Dockerfile
+        container_name: cwphp
+        volumes:
+          - ./src:/var/www/html/src
+          - ./config:/var/www/html/config
+        depends_on:
+          - cwpgsql
+        ports:
+          - 8080:80
+        environment:
+          DB_HOST: cwpgsql
+          DB_PORT: 5432
+          DB_NAME: commetoi
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DATABASE_URL: postgresql://postgres:postgres@cwpgsql:5432/commetoi
+
+    cwadminer:
+      image: adminer
+      restart: always
+      container_name: cwadminer
+      ports:
+        - 8888:8080
