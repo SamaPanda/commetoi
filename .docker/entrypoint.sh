@@ -24,7 +24,7 @@ env
 cd /var/www/html;
 # Migrate database
 php bin/console doctrine:migration:migrate --no-interaction --allow-no-migration;
-# php bin/console doctrine:fixtures:load --no-interaction;
+php bin/console doctrine:fixtures:load --no-interaction;
 
 
 echo "### Exec CMD"
