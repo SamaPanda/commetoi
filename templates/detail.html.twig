@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ product.title }}{% endblock %}
+{% block content %}
+    <div class="row">
+            <div class="col-4 offset-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{  product.title }}</h5>
+                        <p class="card-text">{{ product.country }}</p>
+                        {% if product.country != 'FRA' %}
+                            <p class="card-text">original title: {{ product.originalTitle }}</p>
+                        {% endif %}
+                        <p>{{ product.description }}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Price: {{ product.price}}€</li>
+                        <li class="list-group-item">Ranking: {{ product.ranking }}/10</li>
+                        <li class="list-group-item">Genre: {{ product.genre.name }}</li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="#" class="btn btn-primary">Add to cart</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}
