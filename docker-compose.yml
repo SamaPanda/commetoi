@@ -16,9 +16,11 @@ services:
             dockerfile: .docker/php/Dockerfile
         container_name: cwphp
         volumes:
-          - .:/var/www/html
-#          - ./src:/var/www/html/src
-#          - ./config:/var/www/html/config
+#          - .:/var/www/html
+          - ./src:/var/www/html/src
+          - ./config:/var/www/html/config
+          - ./assets:/var/www/html/assets
+          - ./templates:/var/www/html/templates
         depends_on:
           - cwpgsql
         ports:
