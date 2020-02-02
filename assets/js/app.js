@@ -22,31 +22,52 @@ require('bootstrap');
 
 $(document).ready(function() {
 
-    const storage = window.sessionStorage;
+    let cart;
+    const url = $('#url').val();
+    const getCart = function(){
+        $.ajax({
+            url: url+'cart/ajax',
+            type: 'GET',
+            cache: false,
+            success: function(data) {
+                cart = data ? JSON.parse(data) : {};
+                countCart();
+            }
+        });
+    }
+
     const countCart = function (){
         var c = 0;
-        $.each(JSON.parse(storage.getItem("cart")),function(i,v) { console.log(v); c = c+v})
+        $.each(cart,function(i,v) { c = c+v})
         $('#cart-count').html(c)
     }
 
     const emptyCart = function(){
-        storage.removeItem("cart");
+        updateCart(null);
         countCart();
     }
 
+    const updateCart = function(cart){
+        $.ajax({
+            url: url+'cart/ajax',
+            type: 'POST',
+            cache: false,
+            data: cart
+        });
+    };
+
+    getCart();
 
     $('.carts').click(function() {
-        let cart = storage.getItem("cart") ? JSON.parse(storage.getItem("cart")) : {} ;
         const itemId = $(this).data("id");
         const quantity = $('#quantity').length > 0 ? parseInt($('#quantity').val()) : 1 ;
         cart[itemId] = cart[itemId] ? cart[itemId] + quantity: quantity;
-        storage.setItem("cart",JSON.stringify(cart))
+        updateCart(JSON.stringify(cart));
         countCart();
     })
 
-    countCart();
-
     var quantitiy=0;
+
     $('.plus').click(function(e){
         e.preventDefault();
         var quantity = parseInt($('#quantity').val());
@@ -61,6 +82,8 @@ $(document).ready(function() {
         }
     });
 
-
+    $('#emptyCart').click(function(){
+        emptyCart();
+    })
 });
 

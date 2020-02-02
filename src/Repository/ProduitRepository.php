@@ -35,4 +35,11 @@ class ProduitRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findCart(array $products){
+        return $this->createQueryBuilder('p')
+            ->where('p.id IN (:productsId)')
+            ->setParameter('productsId', array_keys($products))
+            ->getQuery()->getResult();
+    }
+
 }
