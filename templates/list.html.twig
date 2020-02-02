@@ -35,7 +35,8 @@
                     </ul>
                     <div class="card-body">
                         <a href="{{ path('book_details', {product: product.id}) }}">Details</a>
-                        <a href="#" class="btn btn-primary">Add to cart</a>
+                        <label for="exampleFormControlSelect1">Example select</label>
+                        <a href="#" data-id="{{ product.id }}" class="carts btn btn-primary">Add to cart</a>
                     </div>
                 </div>
             </div>
