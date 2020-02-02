@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+{% block title %}Cart{% endblock %}
+{% block content %}
+    <div class="row">
+        {% if products is null or products is empty %}
+        <h5>Your cart is empty, please pick some <a href="{{ path('index') }}">books!</a></h5>
+        {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.title }}</td>
+                <td>{{ cart[product.id] }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.price * cart[product.id] }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2"></td>
+                <td>Total</td>
+                <td>{{ total }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <a type="button" href="{{ path('emptyCart') }}" class="btn btn-outline-danger">Empty cart</a>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Produit;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ShopController extends AbstractController{
@@ -34,5 +37,43 @@ class ShopController extends AbstractController{
      */
     public function getAction(Produit $product){
         return $this->render('detail.html.twig', ['product' => $product]);
+    }
+
+    /**
+     * @Route("/cart", name="cart")
+     */
+    public function cartAction(SessionInterface $session){
+        $cart = (array)json_decode($session->get('cart', ""));
+        $products = $this->getDoctrine()->getRepository(Produit::class)->findCart($cart);
+        $total = 0;
+
+        foreach($products as $product){
+            /** @var $product Produit **/
+            $total += $product->getPrice() * $cart[$product->getId()];
+        }
+        return $this->render('cart.html.twig', ['products' => $products, 'cart' => $cart, 'total' => $total]);
+    }
+
+    /**
+     * @Route("/cart/empty", name="emptyCart")
+     */
+    public function emptyCartAction(SessionInterface $session){
+        $session->remove('cart');
+        return $this->redirectToRoute('index');
+    }
+
+    /**
+     * @Route("/cart/ajax", methods={"POST","GET"}, name="cart_ajax")
+    */
+    public function cartAjaxAction(SessionInterface $session, RequestStack $request){
+        if(!$request->getCurrentRequest()->isXmlHttpRequest()) {
+            return $this->forward('App\Controller\ShopController::cartAction');
+        }
+        if($request->getCurrentRequest()->getMethod() === 'POST'){
+            $cart = $request->getCurrentRequest()->getContent();
+            $session->set('cart', $cart);
+        }
+        $cart = $session->get('cart') ? $session->get('cart') : null ;
+        return new Response($cart);
     }
 }
