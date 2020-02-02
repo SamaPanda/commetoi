@@ -21,6 +21,7 @@ services:
           - ./config:/var/www/html/config
           - ./assets:/var/www/html/assets
           - ./templates:/var/www/html/templates
+          - ./public:/var/www/html/public
         depends_on:
           - cwpgsql
         ports:
