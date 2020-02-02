@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -77,9 +79,13 @@ class Produit
      * @var Genre
      *
      * @ORM\JoinColumn(name="genre_id", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="App\Entity\Genre")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Genre")
+     * @ORM\JoinTable(name="produit_genre",
+     *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="genre_id", referencedColumnName="id")}
+     *      )
      */
-    private $genre;
+    private $genres;
 
     /**
      * @var integer
@@ -94,6 +100,11 @@ class Produit
      * @ORM\Column(name="price", type="float")
      */
     private $price;
+
+    public function __construct()
+    {
+        $this->genres = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -204,6 +215,32 @@ class Produit
     public function setGenre(?Genre $genre): self
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Genre[]
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+
+    public function addGenre(Genre $genre): self
+    {
+        if (!$this->genres->contains($genre)) {
+            $this->genres[] = $genre;
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): self
+    {
+        if ($this->genres->contains($genre)) {
+            $this->genres->removeElement($genre);
+        }
 
         return $this;
     }

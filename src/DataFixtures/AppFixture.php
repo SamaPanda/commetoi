@@ -21,7 +21,7 @@ class AppFixture extends Fixture
         //load genre
         for ($i = 0; $i < 15; $i++) {
             $genre = new Genre();
-            $genre->setName($this->faker->sentence(2));
+            $genre->setName($this->faker->word());
             $this->manager->persist($genre);
             $this->addReference( 'genre_' . $i, $genre);
         }
@@ -29,11 +29,12 @@ class AppFixture extends Fixture
         //load produits
         for ($i = 0; $i < 50; $i++) {
             $product = new Produit();
-            $product->setTitle($this->faker->sentence(3));
+            $product->setTitle($this->faker->realText(30));
             $product->setType('papier');
             $product->setCountry($this->faker->countryISOAlpha3);
             $product->setDescription($this->faker->sentence(25));
-            $product->setGenre($this->getRandomGenre());
+            $product->addGenre($this->getRandomGenre());
+            $product->addGenre($this->getRandomGenre());
             $product->setYear($this->faker->year('now'));
             $product->setPrice($this->faker->randomFloat(1,10,30));
             $product->setRanking(5);
