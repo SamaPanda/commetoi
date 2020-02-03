@@ -8,9 +8,9 @@
                         <h5 class="card-title">{{  product.title }}</h5>
                         <p class="card-text">{{ product.country }}</p>
                         {% if product.country != 'FRA' %}
-                            <p class="card-text">original title: {{ product.originalTitle }}</p>
+                            <p class="card-text"><b>Original title:</b> {{ product.originalTitle }}</p>
                         {% endif %}
-                        <p>{{ product.description }}</p>
+                        <p><b>Description: </b>{{ product.description }}</p>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Price: {{ product.price}}€</li>
