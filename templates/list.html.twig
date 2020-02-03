@@ -2,7 +2,7 @@
 {% block title %}List{% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-1">{{ count }} books</div>
+        <div class="col"><p>{{ count }} books</p></div>
         <div class="col">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -20,13 +20,14 @@
                 </ul>
             </nav>
         </div>
+        <div class="col"></div>
     </div>
     <div class="row">
         {% for product in products %}
             <div class="col-lg-3 col-md-4 col-sm-6 m-0 p-0">
                 <div class="card m-1">
                     <div class="card-body">
-                        <h5 class="card-title">{{  product.title }}</h5>
+                        <h5 class="card-title list-title">{{  product.title }}</h5>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Price: {{ product.price}}€</li>
@@ -39,7 +40,7 @@
                     </ul>
                     <div class="card-body">
                         <a href="{{ path('book_details', {product: product.id}) }}">Details</a>
-                        <a href="#" data-id="{{ product.id }}" class="carts btn btn-primary">Add to cart</a>
+                        <a href="#" data-id="{{ product.id }}" class="float-right carts btn btn-primary">Add to cart</a>
                     </div>
                 </div>
             </div>
